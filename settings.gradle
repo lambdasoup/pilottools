@@ -1,0 +1,2 @@
+include ':app', ':xpnet'
+rootProject.name='XtraControl'
