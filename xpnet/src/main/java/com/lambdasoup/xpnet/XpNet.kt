@@ -5,9 +5,6 @@ import java.io.IOException
 import java.net.DatagramPacket
 import java.net.InetAddress
 import java.net.MulticastSocket
-import java.nio.ByteBuffer
-import java.nio.charset.StandardCharsets
-import java.util.*
 
 fun main() {
     try {
@@ -15,19 +12,17 @@ fun main() {
         udpSocket.reuseAddress = true
         val group = InetAddress.getByName("239.255.1.1")
         udpSocket.joinGroup(group)
-        val message = ByteArray(1500)
-        val packet = DatagramPacket(message, message.size)
+        val ba = ByteArray(1500)
+        val packet = DatagramPacket(ba, ba.size)
         udpSocket.receive(packet)
         println("received packet from ${packet.address} with length ${packet.length}")
-        val bb = ByteBuffer.wrap(message, 0, packet.length)
 
-        val bb64 = Base64.getEncoder().encode(bb)
-        val s64 = StandardCharsets.US_ASCII.decode(bb64)
-        println(s64)
+        val msg = Message.wrap(ba, packet.length)
 
-        bb.rewind()
+        println(msg.base64String())
 
-        val beacon = Parser().parse(bb)
+
+        val beacon = Parser().parse(msg)
 
         println("Received data $beacon")
     } catch (e: IOException) {
@@ -37,11 +32,11 @@ fun main() {
 
 data class Beacon(
     val majorVersion: Byte,
-    val minorVersion: Int,
+    val minorVersion: Byte,
     val applicationHostId: Int,
     val versionNumber: Int,
-    val role: Long,
-    val port: Int,
+    val role: UInt,
+    val port: UShort,
     val computerName: String
 )
 

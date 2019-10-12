@@ -1,17 +1,15 @@
 package com.lambdasoup.xpnet
 
-import java.nio.ByteBuffer
-
 class Parser {
-    fun parse(bb: ByteBuffer): Beacon {
+    fun parse(message: Message): Beacon {
         return Beacon(
-            majorVersion = bb.get(),
-            minorVersion = bb.get().toInt(),
-            applicationHostId = bb.int,
-            versionNumber = bb.int.toUnsignedLong().toInt(),
-            role = bb.long,
-            port = bb.int,
-            computerName = "vla"
+            majorVersion = message.uchar(),
+            minorVersion = message.uchar(),
+            applicationHostId = message.xint(),
+            versionNumber = message.xint(),
+            role = message.uint(),
+            port = message.ushort(),
+            computerName = message.xchr()
         )
     }
 }
