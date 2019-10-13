@@ -22,28 +22,33 @@ fun main() {
     clientListener.start()
     val client = future.get(5, TimeUnit.SECONDS)
 
-    // send test command
+    // create connection
     val connection = Connection(client)
-    connection.sendCommand("sim/electrical/battery_1_toggle")
 
     // request DREF
-    print("request rrefs")
-    connection.requestRrefs(10, 123, "sim/cockpit2/controls/flap_ratio")
+    println("request rrefs")
+    connection.requestRrefs(10, "sim/cockpit/autopilot/heading_mag")
 
     // subscribe some RREFS
-    print("receive rrefs")
+    println("receive rrefs")
     val drefListener = Thread {
-        connection.listen { packet ->
-            println(packet)
+        connection.listen { value ->
+            println(value)
         }
     }
     drefListener.isDaemon = true
     drefListener.start()
-    Thread.sleep(2000)
+
+    // send test command
+    connection.sendCommand("sim/electrical/battery_1_on")
+    repeat(100) {
+        connection.sendCommand("sim/autopilot/heading_up")
+        Thread.sleep(100)
+    }
 
     // stop RREFS (request DREFS with freq 0)
     println("stopping rrefs")
-    connection.requestRrefs(0, 123, "sim/cockpit2/controls/flap_ratio")
+    connection.stopRrefs()
     Thread.sleep(2000)
 }
 
@@ -53,14 +58,25 @@ class Connection(private val client: Client) {
     private val sendBuf = ByteBuffer.allocate(413).apply { order(ByteOrder.LITTLE_ENDIAN) }
     private val receiveBuf = ByteBuffer.allocate(1500).apply { order(ByteOrder.LITTLE_ENDIAN) }
 
+    private val rrefs = arrayListOf<String>()
+
     fun sendCommand(command: String) {
         sendBuf.clear()
-        val ba = "CMND\u0000$command\u0000".toByteArray(charset = Charsets.US_ASCII)
-        val packet = DatagramPacket(ba, 0, ba.size, client.address, 49010)
+        sendBuf.put("CMND\u0000".toByteArray(charset = Charsets.US_ASCII))
+        sendBuf.put(command.toByteArray(charset = Charsets.US_ASCII))
+        sendBuf.put(0x00)
+        val packet = DatagramPacket(sendBuf.array(), 0, sendBuf.capacity(), client.address, 49000)
         socket.send(packet)
     }
 
-    fun requestRrefs(freq: Int, id: Int, dref: String) {
+    fun requestRrefs(freq: Int, dref: String) {
+        val id = rrefs.size
+        rrefs.add(dref)
+
+        sendRrefReq(freq, id, dref)
+    }
+
+    private fun sendRrefReq(freq: Int, id: Int, dref: String) {
         sendBuf.clear()
         sendBuf.put("RREF\u0000".toByteArray(charset = Charsets.US_ASCII))
         sendBuf.putInt(freq)
@@ -71,15 +87,26 @@ class Connection(private val client: Client) {
         socket.send(packet)
     }
 
-    fun listen(listener: (DatagramPacket) -> Unit) {
+    fun listen(listener: (Value) -> Unit) {
         while (true) {
+            receiveBuf.clear()
             val packet = DatagramPacket(
                 receiveBuf.array(), 0, receiveBuf.capacity(),
                 client.address, 49000
             )
             socket.receive(packet)
-            listener(packet)
+            val msg = Message.wrap(receiveBuf.array(), packet.length)
+            listener(
+                Value(
+                    dref = rrefs[msg.xint()],
+                    value = msg.xflt()
+                )
+            )
         }
+    }
+
+    fun stopRrefs() {
+        rrefs.forEachIndexed { id, dref -> sendRrefReq(0, id, dref) }
     }
 }
 
@@ -87,6 +114,11 @@ class Connection(private val client: Client) {
 data class Client(
     val name: String,
     val address: InetAddress
+)
+
+data class Value(
+    val dref: String,
+    val value: Float
 )
 
 class Registry {

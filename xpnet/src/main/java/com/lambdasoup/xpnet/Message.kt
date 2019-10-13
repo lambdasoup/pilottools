@@ -44,6 +44,10 @@ class Message private constructor(
         return StandardCharsets.US_ASCII.decode(buf64).toString()
     }
 
+    fun xflt(): Float {
+        return buf.float
+    }
+
     companion object {
         fun wrap(byteArray: ByteArray, length: Int): Message {
             val buf = ByteBuffer.wrap(byteArray, 0, length)
