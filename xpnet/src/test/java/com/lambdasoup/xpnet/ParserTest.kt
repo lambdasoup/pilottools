@@ -6,6 +6,7 @@ import java.util.*
 
 class ParserTest {
 
+    @ExperimentalUnsignedTypes
     @Test
     fun `should parse BEACON`() {
         val s64 = "QkVDTgABAgEAAADBuwEAAQAAAGi/U0FUVVJOAHK/"
