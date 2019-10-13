@@ -12,6 +12,8 @@ val appModule = module {
     viewModel { ClientsViewModel() }
 }
 
+// TODO try to get rid of @suppress, Android Studio bug?
+@Suppress("unused")
 class PilotToolsApplication : Application() {
     override fun onCreate() {
         super.onCreate()

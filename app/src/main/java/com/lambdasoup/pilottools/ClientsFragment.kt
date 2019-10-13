@@ -4,7 +4,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.lambdasoup.pilottools.databinding.ClientsFragmentBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
@@ -15,6 +17,15 @@ class ClientsFragment : Fragment() {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.clients_fragment, container, false)
+        val binding: ClientsFragmentBinding = DataBindingUtil.inflate(
+            inflater,
+            R.layout.clients_fragment,
+            container,
+            false
+        )
+        binding.lifecycleOwner = viewLifecycleOwner
+        binding.vm = vm
+
+        return binding.root
     }
 }
