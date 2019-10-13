@@ -5,13 +5,30 @@ import java.net.DatagramSocket
 import java.net.InetAddress
 import java.net.MulticastSocket
 import java.nio.ByteBuffer
+import java.util.concurrent.CompletableFuture
+import java.util.concurrent.TimeUnit
 
 fun main() {
-    val client = getClient()
+    // get first seen client
+    val reg = Registry()
+    val future = CompletableFuture<Client>()
+    val listener = Thread {
+        reg.listen { client ->
+            future.complete(client)
+        }
+    }
+    listener.isDaemon = true
+    listener.start()
+    val client = future.get(5, TimeUnit.SECONDS)
 
+    //
     val connection = Connection(client)
 
     connection.sendCommand("sim/electrical/battery_1_toggle")
+
+    // TODO request DREF
+    // TODO read RREFS
+    // TODO stop RREFS (request DREFS with freq 0)
 }
 
 class Connection(private val client: Client) {
@@ -33,27 +50,33 @@ data class Client(
     val address: InetAddress
 )
 
-fun getClient(): Client {
-    val udpSocket = MulticastSocket(49707)
-    udpSocket.reuseAddress = true
-    val group = InetAddress.getByName("239.255.1.1")
-    udpSocket.joinGroup(group)
-    val ba = ByteArray(1500)
-    val packet = DatagramPacket(ba, ba.size)
-    udpSocket.receive(packet)
-    val msg = Message.wrap(ba, packet.length)
+class Registry {
+    private val socket = MulticastSocket(49707)
+    private val ba = ByteArray(1500)
 
+    init {
+        socket.reuseAddress = true
+        val group = InetAddress.getByName("239.255.1.1")
+        socket.joinGroup(group)
 
-    val beacon = Parser().parse(msg)
-    return Client(
-        name = beacon.computerName,
-        address = packet.address
-    )
+    }
+
+    fun listen(listener: (Client) -> Unit) {
+        while (true) {
+            val packet = DatagramPacket(ba, ba.size)
+            socket.receive(packet)
+            val msg = Message.wrap(ba, packet.length)
+
+            val beacon = Parser().parse(msg)
+            listener(
+                Client(
+                    name = beacon.computerName,
+                    address = packet.address
+                )
+            )
+        }
+    }
 }
-
-data class Command(
-    val commandStr: String
-)
 
 data class Beacon(
     val majorVersion: Byte,
