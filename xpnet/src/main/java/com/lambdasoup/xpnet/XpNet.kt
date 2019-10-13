@@ -27,9 +27,11 @@ fun main() {
     connection.sendCommand("sim/electrical/battery_1_toggle")
 
     // request DREF
-    connection.requestRrefs(1, 123, "sim/cockpit2/controls/flap_ratio")
+    print("request rrefs")
+    connection.requestRrefs(10, 123, "sim/cockpit2/controls/flap_ratio")
 
-    // TODO read RREFS
+    // subscribe some RREFS
+    print("receive rrefs")
     val drefListener = Thread {
         connection.listen { packet ->
             println(packet)
@@ -38,32 +40,34 @@ fun main() {
     drefListener.isDaemon = true
     drefListener.start()
     Thread.sleep(2000)
-    println("stop")
 
     // stop RREFS (request DREFS with freq 0)
+    println("stopping rrefs")
     connection.requestRrefs(0, 123, "sim/cockpit2/controls/flap_ratio")
+    Thread.sleep(2000)
 }
 
 class Connection(private val client: Client) {
 
     private val socket = DatagramSocket()
-    private val sendBuf = ByteBuffer.allocate(500).apply { order(ByteOrder.LITTLE_ENDIAN) }
+    private val sendBuf = ByteBuffer.allocate(413).apply { order(ByteOrder.LITTLE_ENDIAN) }
     private val receiveBuf = ByteBuffer.allocate(1500).apply { order(ByteOrder.LITTLE_ENDIAN) }
 
     fun sendCommand(command: String) {
-        sendBuf.rewind()
+        sendBuf.clear()
         val ba = "CMND\u0000$command\u0000".toByteArray(charset = Charsets.US_ASCII)
-        val packet = DatagramPacket(ba, 0, ba.size, client.address, 49000)
+        val packet = DatagramPacket(ba, 0, ba.size, client.address, 49010)
         socket.send(packet)
     }
 
     fun requestRrefs(freq: Int, id: Int, dref: String) {
-        sendBuf.rewind()
+        sendBuf.clear()
         sendBuf.put("RREF\u0000".toByteArray(charset = Charsets.US_ASCII))
         sendBuf.putInt(freq)
         sendBuf.putInt(id)
         sendBuf.put(dref.toByteArray(charset = Charsets.US_ASCII))
-        val packet = DatagramPacket(sendBuf.array(), 0, sendBuf.position(), client.address, 49000)
+        sendBuf.put(0x00)
+        val packet = DatagramPacket(sendBuf.array(), 0, sendBuf.capacity(), client.address, 49000)
         socket.send(packet)
     }
 
