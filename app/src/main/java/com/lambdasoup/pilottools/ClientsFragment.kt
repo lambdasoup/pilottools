@@ -5,16 +5,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
+import org.koin.android.viewmodel.ext.android.viewModel
 
 
 class ClientsFragment : Fragment() {
-
-    companion object {
-        fun newInstance() = ClientsFragment()
-    }
-
-    private lateinit var viewModel: ClientsViewModel
+    private val vm: ClientsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -22,11 +17,4 @@ class ClientsFragment : Fragment() {
     ): View? {
         return inflater.inflate(R.layout.clients_fragment, container, false)
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        viewModel = ViewModelProviders.of(this).get(ClientsViewModel::class.java)
-        // TODO: Use the ViewModel
-    }
-
 }
