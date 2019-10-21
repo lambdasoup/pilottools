@@ -6,21 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.lambdasoup.pilottools.databinding.ClientsFragmentBinding
+import com.lambdasoup.pilottools.databinding.InstrumentsFragmentBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 
 
-class ClientsFragment : Fragment() {
-    private val vm: ClientsViewModel by viewModel()
+class InstrumentsFragment : Fragment() {
+    private val vm: InstrumentsViewModel by viewModel()
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val binding: ClientsFragmentBinding = DataBindingUtil.inflate(
+        val binding: InstrumentsFragmentBinding = DataBindingUtil.inflate(
             inflater,
-            R.layout.clients_fragment,
+            R.layout.instruments_fragment,
             container,
             false
         )
@@ -30,9 +29,13 @@ class ClientsFragment : Fragment() {
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onStart() {
+        super.onStart()
 
-        findNavController().navigate(R.id.action_clients_to_instruments)
+        turnRight()
+    }
+
+    fun turnRight() {
+        view!!.postDelayed({ vm.turnRight(); turnRight()}, 15)
     }
 }

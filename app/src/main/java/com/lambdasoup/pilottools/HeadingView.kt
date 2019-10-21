@@ -13,7 +13,12 @@ class HeadingView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyle: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    private var heading: Float
+    var heading: Float = 0.0f
+    set(value) {
+        field = value
+        invalidate()
+    }
+
 
     private val textPaint: TextPaint
     private val compassPaint: Paint = Paint().apply {

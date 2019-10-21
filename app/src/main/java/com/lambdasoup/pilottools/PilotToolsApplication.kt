@@ -8,8 +8,8 @@ import org.koin.core.context.startKoin
 import org.koin.dsl.module
 
 val appModule = module {
-
     viewModel { ClientsViewModel() }
+    viewModel { InstrumentsViewModel() }
 }
 
 // TODO try to get rid of @suppress, Android Studio bug?
