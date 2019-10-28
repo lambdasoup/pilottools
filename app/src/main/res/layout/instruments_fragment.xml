@@ -14,9 +14,10 @@
         android:layout_height="match_parent"
         tools:context=".InstrumentsFragment">
 
-        <com.lambdasoup.pilottools.HeadingView
+        <com.lambdasoup.pilottools.EhsiView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            app:onTurnRight="@{vm::turnRight}"
             app:heading="@{vm.heading}" />
 
     </FrameLayout>
