@@ -13,4 +13,8 @@ class InstrumentsViewModel : ViewModel() {
     fun turnRight() {
         _heading.value = (_heading.value!! + 1) % 360.0f
     }
+
+    fun turnLeft() {
+        _heading.value = (_heading.value!! - 1) % 360.0f
+    }
 }

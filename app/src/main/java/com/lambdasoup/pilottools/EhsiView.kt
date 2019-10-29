@@ -14,6 +14,11 @@ import kotlinx.android.synthetic.main.ehsi_view.view.*
         type = EhsiView::class,
         attribute = "app:onTurnRight",
         method = "setOnTurnRightListener"
+    ),
+    BindingMethod(
+        type = EhsiView::class,
+        attribute = "app:onTurnLeft",
+        method = "setOnTurnLeftListener"
     )
 ])
 class EhsiView @JvmOverloads constructor(
@@ -24,6 +29,7 @@ class EhsiView @JvmOverloads constructor(
     set(value) {
         field = value
         heading_view.heading = value
+        heading_text.text = "%.0f".format(value)
     }
 
     init {
@@ -32,5 +38,9 @@ class EhsiView @JvmOverloads constructor(
 
     fun setOnTurnRightListener(listener: () -> Unit) {
         turn_right.setOnClickListener { listener.invoke() }
+    }
+
+    fun setOnTurnLeftListener(listener: () -> Unit) {
+        turn_left.setOnClickListener { listener.invoke() }
     }
 }

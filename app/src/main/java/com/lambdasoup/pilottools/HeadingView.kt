@@ -21,7 +21,6 @@ class HeadingView @JvmOverloads constructor(
         invalidate()
     }
 
-
     private val textPaint: TextPaint
     private val compassPaint: Paint = Paint().apply {
         color = Color.WHITE

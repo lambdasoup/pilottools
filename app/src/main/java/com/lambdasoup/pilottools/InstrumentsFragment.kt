@@ -28,14 +28,4 @@ class InstrumentsFragment : Fragment() {
 
         return binding.root
     }
-
-    override fun onStart() {
-        super.onStart()
-
-        turnRight()
-    }
-
-    fun turnRight() {
-        view!!.postDelayed({ vm.turnRight(); turnRight()}, 15)
-    }
 }

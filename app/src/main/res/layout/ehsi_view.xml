@@ -18,9 +18,18 @@
         android:text="↷"
         tools:ignore="HardcodedText" />
 
+    <TextView
+        android:id="@+id/heading_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        tools:text="244" />
+
     <com.lambdasoup.pilottools.HeadingView
         android:id="@+id/heading_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        tools:heading="244" />
 
 </merge>
