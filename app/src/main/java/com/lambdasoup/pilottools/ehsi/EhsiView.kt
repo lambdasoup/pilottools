@@ -1,4 +1,4 @@
-package com.lambdasoup.pilottools
+package com.lambdasoup.pilottools.ehsi
 
 import android.content.Context
 import android.util.AttributeSet
@@ -8,6 +8,7 @@ import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
 import androidx.databinding.DataBindingUtil
 import androidx.databinding.ObservableField
+import com.lambdasoup.pilottools.R
 import com.lambdasoup.pilottools.databinding.EhsiViewBinding
 import kotlinx.android.synthetic.main.ehsi_view.view.*
 
@@ -29,9 +30,9 @@ class EhsiView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    private val heading = ObservableField<Float>()
-    fun setHeading(value: Float) {
-        heading.set(value)
+    private val value = ObservableField<Ehsi>()
+    fun setValue(value: Ehsi) {
+        this.value.set(value)
     }
 
     init {
@@ -39,7 +40,7 @@ class EhsiView @JvmOverloads constructor(
         val binding: EhsiViewBinding = DataBindingUtil.inflate(
             inflater, R.layout.ehsi_view, this, true
         )
-        binding.heading = heading
+        binding.value = value
     }
 
     fun setOnTurnRightListener(listener: () -> Unit) {

@@ -14,13 +14,13 @@
         android:layout_height="match_parent"
         tools:context=".InstrumentsFragment">
 
-        <com.lambdasoup.pilottools.EhsiView
+        <com.lambdasoup.pilottools.ehsi.EhsiView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             app:onTurnRight="@{vm::turnRight}"
             app:onTurnLeft="@{vm::turnLeft}"
             tools:heading="120.0"
-            app:heading="@{vm.heading}" />
+            app:value="@{vm.ehsi}" />
 
     </FrameLayout>
 </layout>

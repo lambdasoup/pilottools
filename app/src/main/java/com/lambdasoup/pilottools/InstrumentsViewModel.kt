@@ -3,18 +3,19 @@ package com.lambdasoup.pilottools
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.lambdasoup.pilottools.ehsi.Ehsi
 
 class InstrumentsViewModel : ViewModel() {
-    private val _heading = MutableLiveData<Float>().apply {
-        value = 230f
+    private val _ehsi = MutableLiveData<Ehsi>().apply {
+        value = Ehsi(heading = 230f)
     }
-    val heading: LiveData<Float> = _heading
+    val ehsi: LiveData<Ehsi> = _ehsi
 
     fun turnRight() {
-        _heading.value = (_heading.value!! + 1) % 360.0f
+        _ehsi.value = Ehsi(heading = 215.2f)
     }
 
     fun turnLeft() {
-        _heading.value = (_heading.value!! - 1) % 360.0f
+        _ehsi.value = Ehsi(heading = 77.8f)
     }
 }

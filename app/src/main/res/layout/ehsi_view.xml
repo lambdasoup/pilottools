@@ -5,9 +5,13 @@
 
     <data>
 
+        <import type="com.lambdasoup.pilottools.ehsi.Ehsi" />
+
+        <import type="androidx.databinding.ObservableField" />
+
         <variable
-            name="heading"
-            type="androidx.databinding.ObservableField&lt;Float&gt;" />
+            name="value"
+            type="ObservableField&lt;Ehsi&gt;" />
     </data>
 
     <merge tools:parentTag="android.widget.FrameLayout">
@@ -32,7 +36,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:text="@{heading}"
+            android:text="@{value.heading}"
             android:textAppearance="@style/TextAppearance.AppCompat.Large"
             tools:text="244" />
 
@@ -40,7 +44,7 @@
             android:id="@+id/heading_view"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            app:heading="@{heading}" />
+            app:heading="@{value.heading}" />
 
     </merge>
 
