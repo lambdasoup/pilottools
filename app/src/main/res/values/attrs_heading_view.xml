@@ -1,5 +1,0 @@
-<resources>
-    <declare-styleable name="HeadingView">
-        <attr name="heading" format="float" />
-    </declare-styleable>
-</resources>

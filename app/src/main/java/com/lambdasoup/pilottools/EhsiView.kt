@@ -3,37 +3,43 @@ package com.lambdasoup.pilottools
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
-import android.view.View
 import android.widget.FrameLayout
 import androidx.databinding.BindingMethod
 import androidx.databinding.BindingMethods
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ObservableField
+import com.lambdasoup.pilottools.databinding.EhsiViewBinding
 import kotlinx.android.synthetic.main.ehsi_view.view.*
 
-@BindingMethods(value = [
-    BindingMethod(
-        type = EhsiView::class,
-        attribute = "app:onTurnRight",
-        method = "setOnTurnRightListener"
-    ),
-    BindingMethod(
-        type = EhsiView::class,
-        attribute = "app:onTurnLeft",
-        method = "setOnTurnLeftListener"
-    )
-])
+@BindingMethods(
+    value = [
+        BindingMethod(
+            type = EhsiView::class,
+            attribute = "app:onTurnRight",
+            method = "setOnTurnRightListener"
+        ),
+        BindingMethod(
+            type = EhsiView::class,
+            attribute = "app:onTurnLeft",
+            method = "setOnTurnLeftListener"
+        )
+    ]
+)
 class EhsiView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyle: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : FrameLayout(context, attrs, defStyleAttr) {
 
-    var heading: Float = 0.0f
-    set(value) {
-        field = value
-        heading_view.heading = value
-        heading_text.text = "%.0f".format(value)
+    private val heading = ObservableField<Float>()
+    fun setHeading(value: Float) {
+        heading.set(value)
     }
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.ehsi_view, this)
+        val inflater = LayoutInflater.from(context)
+        val binding: EhsiViewBinding = DataBindingUtil.inflate(
+            inflater, R.layout.ehsi_view, this, true
+        )
+        binding.heading = heading
     }
 
     fun setOnTurnRightListener(listener: () -> Unit) {

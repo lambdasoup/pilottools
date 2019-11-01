@@ -1,35 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merge xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    tools:parentTag="android.widget.FrameLayout">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
-    <Button
-        android:id="@+id/turn_left"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="↶"
-        tools:ignore="HardcodedText" />
+    <data>
 
-    <Button
-        android:id="@+id/turn_right"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end"
-        android:text="↷"
-        tools:ignore="HardcodedText" />
+        <variable
+            name="heading"
+            type="androidx.databinding.ObservableField&lt;Float&gt;" />
+    </data>
 
-    <TextView
-        android:id="@+id/heading_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        tools:text="244" />
+    <merge tools:parentTag="android.widget.FrameLayout">
 
-    <com.lambdasoup.pilottools.HeadingView
-        android:id="@+id/heading_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:heading="244" />
+        <Button
+            android:id="@+id/turn_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="↶"
+            tools:ignore="HardcodedText" />
 
-</merge>
+        <Button
+            android:id="@+id/turn_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end"
+            android:text="↷"
+            tools:ignore="HardcodedText" />
+
+        <TextView
+            android:id="@+id/heading_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:text="@{heading}"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            tools:text="244" />
+
+        <com.lambdasoup.pilottools.HeadingView
+            android:id="@+id/heading_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:heading="@{heading}" />
+
+    </merge>
+
+</layout>

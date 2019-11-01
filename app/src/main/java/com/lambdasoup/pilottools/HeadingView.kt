@@ -7,12 +7,10 @@ import android.graphics.Paint
 import android.graphics.RectF
 import android.text.TextPaint
 import android.util.AttributeSet
-import android.view.LayoutInflater
 import android.view.View
-import android.widget.FrameLayout
 
 class HeadingView @JvmOverloads constructor(
-    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0, defStyle: Int = 0
+    context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
     var heading: Float = 0.0f
@@ -31,17 +29,6 @@ class HeadingView @JvmOverloads constructor(
     private val compassRect = RectF()
 
     init {
-        val a = context.obtainStyledAttributes(
-            attrs, R.styleable.HeadingView, defStyle, 0
-        )
-
-        heading = a.getFloat(
-            R.styleable.HeadingView_heading,
-            0.0f
-        )
-
-        a.recycle()
-
         // Set up a default TextPaint object
         textPaint = TextPaint().apply {
             flags = Paint.ANTI_ALIAS_FLAG
