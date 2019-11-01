@@ -8,15 +8,29 @@ import android.graphics.RectF
 import android.text.TextPaint
 import android.util.AttributeSet
 import android.view.View
+import androidx.dynamicanimation.animation.FloatPropertyCompat
+import androidx.dynamicanimation.animation.SpringAnimation
 
 class HeadingView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : View(context, attrs, defStyleAttr) {
 
-    var heading: Float = 0.0f
-    set(value) {
-        field = value
-        invalidate()
+    private val prop = object : FloatPropertyCompat<HeadingView>("value") {
+        override fun setValue(view: HeadingView, value: Float) {
+            heading = value
+            invalidate()
+        }
+
+        override fun getValue(view: HeadingView): Float {
+            return heading
+        }
+    }
+    private val dampener = SpringAnimation(this, prop)
+
+    private var heading: Float = 0.0f
+
+    fun setValue(value: Float) {
+        dampener.animateToFinalPosition(value)
     }
 
     private val textPaint: TextPaint

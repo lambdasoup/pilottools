@@ -42,6 +42,9 @@ dependencies {
     implementation 'androidx.lifecycle:lifecycle-extensions:2.1.0'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.1.0'
 
+    def dynamicanimation_version = "1.0.0"
+    implementation "androidx.dynamicanimation:dynamicanimation:$dynamicanimation_version"
+
     // koin
     implementation 'org.koin:koin-android-viewmodel:2.0.1'
 
