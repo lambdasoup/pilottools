@@ -6,7 +6,7 @@
 
         <variable
             name="vm"
-            type="com.lambdasoup.pilottools.ClientsViewModel" />
+            type="com.lambdasoup.pilottools.clients.ClientsViewModel" />
     </data>
 
     <FrameLayout
@@ -18,7 +18,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="@{vm.example}"
+            android:text="@{vm.clients.component1()}"
             tools:text="Hello Layout Preview!" />
 
     </FrameLayout>

@@ -129,7 +129,6 @@ class Registry {
         socket.reuseAddress = true
         val group = InetAddress.getByName("239.255.1.1")
         socket.joinGroup(group)
-
     }
 
     fun listen(listener: (Client) -> Unit) {

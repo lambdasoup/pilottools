@@ -8,7 +8,7 @@
 
     <fragment
         android:id="@+id/clients"
-        android:name="com.lambdasoup.pilottools.ClientsFragment"
+        android:name="com.lambdasoup.pilottools.clients.ClientsFragment"
         android:label="Clients"
         tools:layout="@layout/clients_fragment">
         <action

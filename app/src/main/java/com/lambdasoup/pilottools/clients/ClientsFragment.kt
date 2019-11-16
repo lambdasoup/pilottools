@@ -1,4 +1,4 @@
-package com.lambdasoup.pilottools
+package com.lambdasoup.pilottools.clients
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,9 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
+import com.lambdasoup.pilottools.R
 import com.lambdasoup.pilottools.databinding.ClientsFragmentBinding
-import org.koin.android.viewmodel.ext.android.viewModel
+import org.koin.androidx.viewmodel.ext.android.viewModel
 
 
 class ClientsFragment : Fragment() {
@@ -28,11 +28,5 @@ class ClientsFragment : Fragment() {
         binding.vm = vm
 
         return binding.root
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        findNavController().navigate(R.id.action_clients_to_instruments)
     }
 }

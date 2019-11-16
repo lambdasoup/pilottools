@@ -26,6 +26,8 @@ android {
 }
 
 dependencies {
+    implementation project(":xpnet")
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     implementation 'androidx.appcompat:appcompat:1.1.0'
     implementation 'androidx.core:core-ktx:1.1.0'
@@ -46,10 +48,18 @@ dependencies {
     implementation "androidx.dynamicanimation:dynamicanimation:$dynamicanimation_version"
 
     // koin
-    implementation 'org.koin:koin-android-viewmodel:2.0.1'
+    def koin_version = "2.0.1"
+    implementation "org.koin:koin-androidx-viewmodel:$koin_version"
+    androidTestImplementation ("org.koin:koin-test:$koin_version") {
+        exclude group: 'org.mockito'
+    }
 
     testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.linkedin.dexmaker:dexmaker-mockito-inline:2.25.0'
+    androidTestImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0"
 
     androidTestImplementation 'androidx.test:runner:1.2.0'
+    androidTestImplementation 'androidx.test:rules:1.2.0'
+    androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
 }
